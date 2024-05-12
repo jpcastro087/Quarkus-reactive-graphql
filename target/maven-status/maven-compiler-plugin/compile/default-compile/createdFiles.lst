@@ -1,0 +1,7 @@
+org/financial/response/ErrorResponse.class
+org/financial/response/QuoteResponse.class
+org/financial/client/FinnHubClient.class
+org/financial/resources/FinancialResource.class
+org/financial/domain/StockMarketAction.class
+org/financial/services/FinancialService.class
+org/financial/request/StockMarketActionRequest.class
