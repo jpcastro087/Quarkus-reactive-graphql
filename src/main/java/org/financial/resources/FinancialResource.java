@@ -49,7 +49,7 @@ public class FinancialResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("reactive/repository")
     public Uni<List<StockMarketAction>> getStockMarketActionsReactiveRepository() {
-        return financialService.findAllRepository();
+        return financialService.findAllFromRepository();
     }
 
 

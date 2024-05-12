@@ -49,24 +49,6 @@ public class FinancialService {
     @ConfigProperty(name = "financial.token")
     String token;
 
-    @RestClient
-    private FinnHubClient finnHubClient;
-
-/*    @Inject
-    private FinancialRepository financialRepository;*/
-
-/*    @Transactional
-    public StockMarketAction createStockMarketAction(StockMarketActionRequest request) {
-        QuoteResponse quote = finnHubClient.getQuote(request.getSymbol(), token);
-        if (!this.isValidResponse(quote)) {
-            throw new NotFoundException("The symbol '" + request.getSymbol() + "' appears to not exist");
-        }
-        StockMarketAction stockMarketAction = this.parseToStockMarketAction(quote, request.getSymbol());
-        financialRepository.persist(stockMarketAction);
-        return stockMarketAction;
-    }*/
-
-
     public Uni<Response> createStockMarketActionReactive(StockMarketActionRequest request) {
         return webClient.get(443, "finnhub.io", "/api/v1/quote")
                 .setQueryParam("symbol", "AAPL")
@@ -94,7 +76,7 @@ public class FinancialService {
     @WithTransaction
     public Uni<StockMarketAction> createStockMarketActionReactiveFromRepository(StockMarketActionRequest request) {
         return webClient.get(443, "finnhub.io", "/api/v1/quote")
-                .setQueryParam("symbol", "AAPL")
+                .setQueryParam("symbol", request.getSymbol())
                 .setQueryParam("token", "cojvlkpr01qq4pku97e0cojvlkpr01qq4pku97eg")
                 .ssl(true)
                 .send()
@@ -123,8 +105,13 @@ public class FinancialService {
 
 
     @WithSession
-    public Uni<List<StockMarketAction>> findAllRepository() {
+    public Uni<List<StockMarketAction>> findAllFromRepository() {
         return financialRepository.listAll();
+    }
+
+    @WithSession
+    public Uni<List<StockMarketAction>> findBySymbol(String symbol) {
+        return financialRepository.findBySymbol(symbol);
     }
 
 
